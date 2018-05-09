@@ -56,8 +56,18 @@ public class EndToEndTest {
         consoleShouldReceive("Invalid email address: noatsign\n");
     }
 
-    @Ignore @Test public void showAnErrorAndDoNotSendIfTheBodyIsInvalid_story3() {
-    	Message.main("dinah@example.com", "");
+    @Test public void showAnErrorAndDoNotSendIfTheBodyIsInvalid_story3() {
+    	Message.main("dinah@example.com","");
+    	network=(StringWriter) Message.getNetwork();
+    	console=(StringWriter)Message.getConsole();
+        networkShouldReceive(NO_OUTPUT);
+        consoleShouldReceive("Cannot send an email with no body.\n");
+    }
+    
+    @Test public void showAnErrorAndDoNotSendIfTheBodyIsNotProvided_story3() {
+    	Message.main("dinah@example.com");
+    	network=(StringWriter) Message.getNetwork();
+    	console=(StringWriter)Message.getConsole();
         networkShouldReceive(NO_OUTPUT);
         consoleShouldReceive("Cannot send an email with no body.\n");
     }
