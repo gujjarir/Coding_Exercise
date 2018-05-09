@@ -36,6 +36,13 @@ public class Message {
     	
     	StringWriter sw= new StringWriter();
     	
+    	if(network.toString().length()>0){
+    		sw.append("Connection error. Please try again.\n");
+    		setConsole(sw);
+    		return;
+    	}
+    		
+    	
     	if(args[0]=="-im")
     	{
     		isIM=true;
@@ -54,7 +61,7 @@ public class Message {
         		recipients = recipientsList.split(",");	    		
     	}
     	    	
-    	//User story: 1, 2, 3, 4, 5, 6, 7
+    	//User story: 1, 2, 3, 4, 5, 6, 7, 8
     	if(msg.length()>0){    		
     	 	//Validating email pattern using Regex
         	    	           	 
