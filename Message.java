@@ -25,21 +25,29 @@ public class Message {
 		return console;
 	}
 
-
     public static void main(String... args) {
     	Message mObj = new Message();
     	
-    	//User story: 1
+    	//User story: 1, 2
     	String recipient = args[0];
     	String msg = args[1];
     	
-    	String str = "connect smtp\nTo: " + recipient + "\n\n" + msg + "\n\ndisconnect\n";
     	StringWriter sw= new StringWriter();
-    	sw.append(str);
+    	
+    	//Validating email pattern using Regex
+    	Matcher match = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(recipient);
+        if(match.find()) {
+        	String str = "connect smtp\nTo: " + recipient + "\n\n" + msg + "\n\ndisconnect\n";
+        	sw.append(str);
+        	mObj.setNetwork(sw);
 
-    	mObj.setNetwork(sw);
- 
-        
+         }
+        else {
+        	 String str = "Invalid email address: " + recipient + "\n" ;
+         	 sw.append(str);
+        	 mObj.setConsole(sw);
+        }
+  
     }
 
 }
