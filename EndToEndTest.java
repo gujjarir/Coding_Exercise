@@ -115,9 +115,10 @@ public class EndToEndTest {
         consoleShouldReceive(NO_OUTPUT);
     }
 
-    @Ignore @Test public void handleErrorsGracefully_story8() {
+     @Test public void handleErrorsGracefully_story8() {
     	Message.setNetwork(new BadNetworkConnection());
-    	Message.main("joe@example.com", "Hi there!");
+    	Message.main("joe@example.com", "Hi there!");    	
+    	console=(StringWriter)Message.getConsole();
         consoleShouldReceive("Connection error. Please try again.\n");
     }
 
