@@ -94,16 +94,20 @@ public class EndToEndTest {
         consoleShouldReceive("Invalid email addresses: sallyatexample.com joeatexample.com\n");
     }
 
-    @Ignore @Test public void sendAMessageInAnotherFormat_story6() {
+     @Test public void sendAMessageInAnotherFormat_story6() {
     	Message.main("-im", "leslie@chat.example.com", ":-) hey there!");
+    	network=(StringWriter) Message.getNetwork();
+    	console=(StringWriter)Message.getConsole();
         networkShouldReceive("connect chat\n" +
                 "<leslie@chat.example.com>(:-) hey there!)\n" +
                 "disconnect\n");
         consoleShouldReceive(NO_OUTPUT);
     }
 
-    @Ignore @Test public void chatsToMultipleAddressesGetSentIndividually_story7() {
+     @Test public void chatsToMultipleAddressesGetSentIndividually_story7() {
     	Message.main("-im", "leslie@chat.example.com,joey@chat.example.com", "Hello.");
+    	network=(StringWriter) Message.getNetwork();
+    	console=(StringWriter)Message.getConsole();
         networkShouldReceive("connect chat\n" +
                 "<leslie@chat.example.com>(Hello.)\n" +
                 "<joey@chat.example.com>(Hello.)\n" +
