@@ -28,26 +28,37 @@ public class Message {
     public static void main(String... args) {
     	Message mObj = new Message();
     	
-    	//User story: 1, 2
-    	String recipient = args[0];
-    	String msg = args[1];
-    	
+    	String recipient = "";
+    	String msg = "";
     	StringWriter sw= new StringWriter();
     	
-    	//Validating email pattern using Regex
-    	Matcher match = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(recipient);
-        if(match.find()) {
-        	String str = "connect smtp\nTo: " + recipient + "\n\n" + msg + "\n\ndisconnect\n";
-        	sw.append(str);
-        	mObj.setNetwork(sw);
-
-         }
-        else {
-        	 String str = "Invalid email address: " + recipient + "\n" ;
-         	 sw.append(str);
-        	 mObj.setConsole(sw);
-        }
-  
+    	if(args.length>1){
+    		recipient = args[0];
+    	 	msg = args[1];    	 	
+    	}    		
+    	else if(args.length==1)
+    		recipient = args[0];    	
+    		
+    	
+    	//User story: 1, 2, 3
+    	if(msg.length()>0){    		
+    	 	//Validating email pattern using Regex
+        	Matcher match = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(recipient);
+            if(match.find()) {
+            	String str = "connect smtp\nTo: " + recipient + "\n\n" + msg + "\n\ndisconnect\n";
+            	sw.append(str);
+            	mObj.setNetwork(sw);        	
+             }
+            else {
+            	 String str = "Invalid email address: " + recipient + "\n" ;
+             	 sw.append(str);
+            	 mObj.setConsole(sw);
+            }
+    	}
+    	else {
+       	 String str = "Cannot send an email with no body.\n" ;
+        	 sw.append(str);
+       	 mObj.setConsole(sw);
+       }    
     }
-
 }
