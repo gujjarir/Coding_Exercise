@@ -32,38 +32,65 @@ public class Message {
     	String[] recipients = {};    	
     	String msg = "";
     	String recipientsList="";
+    	boolean isIM=false;
+    	
     	StringWriter sw= new StringWriter();
     	
-    	if(args.length>1){
-    		recipientsList=args[0];
+    	if(args[0]=="-im")
+    	{
+    		isIM=true;
+    		recipientsList=args[1];
     		recipients =  recipientsList.split(",");
-    	 	msg = args[1];    	 	
+    	 	msg = args[2];  
     	}    		
-    	else if(args.length==1)
-    		recipients = recipientsList.split(",");	
+    	else
+    	{
+    		if(args.length>1){
+        		recipientsList=args[0];
+        		recipients =  recipientsList.split(",");
+        	 	msg = args[1];    	 	
+        	}    		
+        	else if(args.length==1)
+        		recipients = recipientsList.split(",");	    		
+    	}
     	    	
-    	//User story: 1, 2, 3, 4, 5
+    	//User story: 1, 2, 3, 4, 5, 6, 7
     	if(msg.length()>0){    		
     	 	//Validating email pattern using Regex
         	    	           	 
         	String temp=""; 
         	String str="" ;
         	ArrayList<String> inValidRec=new ArrayList<>();
+        	ArrayList<String> validRec=new ArrayList<>();
         	int count=0;
         	
         	 for (String rep : recipients) {
         		 Matcher match = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(rep);
         		 if(match.find())
-        			 temp +="To: " + rep + "\n";        		 
+        			 validRec.add(rep);        			        		 
         		 else
         		 {        			 
         			 inValidRec.add(rep);
         		 }        		 
         	 }
+        	 
         	 if(inValidRec.isEmpty()) 	 {
-	        	 sw.append("connect smtp\n");
-	        	 sw.append(temp);
-	        	 sw.append("\n" + msg + "\n\ndisconnect\n");        	
+        		 
+        		 if(isIM){
+        			 sw.append("connect chat\n");
+        			 for(String val:validRec){
+    	        		 sw.append("<" + val + ">("+msg+")\n");	        		   		 
+    	        	 }      	 
+        			 sw.append("disconnect\n");    
+        		 }
+        		 else{
+        			 sw.append("connect smtp\n");
+    	        	 for(String val:validRec){
+    	        		 sw.append("To: " + val + "\n");	        		   		 
+    	        	 }      	 
+    	        	 sw.append("\n" + msg + "\n\ndisconnect\n");          			 
+        		 }
+	        	       	
 	        	 mObj.setNetwork(sw); 
         	 }
         	 else {
