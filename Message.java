@@ -29,6 +29,7 @@ public class Message {
     public static void main(String... args) {
     	Message mObj = new Message();
     	
+	//User story: 1, 2, 3, 4, 5, 6, 7, 8
     	String[] recipients = {};    	
     	String msg = "";
     	String recipientsList="";
@@ -36,12 +37,15 @@ public class Message {
     	
     	StringWriter sw= new StringWriter();
     	
+	// Check if network isn’t available (Story - 8)
     	if(network.toString().length()>0){
     		sw.append("Connection error. Please try again.\n");
     		setConsole(sw);
     		return;
     	}
     		
+	// If the first argument is "-im", consider it as chat messaging else as an email 
+	// and pass respective arguments into their variables
     	if(args[0]=="-im") {
     		isIM=true;
     		recipientsList=args[1];
@@ -58,7 +62,7 @@ public class Message {
         		recipients = recipientsList.split(",");	    		
     	}
     	    	
-    	//User story: 1, 2, 3, 4, 5, 6, 7, 8
+    	// Check if message body is valid, if not setconsole
     	if(msg.length()>0){    		
     	 	//Validating email pattern using Regex	           	 
         	String temp=""; 
@@ -69,6 +73,7 @@ public class Message {
         	
         	 for (String rep : recipients) {
         		 Matcher match = Pattern.compile("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+").matcher(rep);
+			 // Based on whether the recipient email address is valid or not, it is added into respective list
         		 if(match.find())
         			 validRec.add(rep);        			        		 
         		 else {      			 
@@ -76,7 +81,9 @@ public class Message {
         		 }        		 
         	 }
         	 
+		// If all the recipients are valid 
         	 if(inValidRec.isEmpty()) {
+			 // If it is Chat message
         		 if(isIM) {
         			 sw.append("connect chat\n");
         			 for(String val:validRec){
@@ -94,6 +101,7 @@ public class Message {
 	        	 mObj.setNetwork(sw); 
         	 }
         	 else {
+			 // slightly different error if more than one email address is invalid 
         		 if(inValidRec.size()==1)
         			 str = "Invalid email address: " + inValidRec.get(0) + "\n" ;  
         		 else
